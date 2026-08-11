@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: loja-veloz-config
+  namespace: loja-veloz
+data:
+  APP_ENV: "production"
+
+  # PostgreSQL
+  DB_HOST: "postgres-service"
+  DB_PORT: "5432"
+  DB_NAME: "loja_veloz"
+
+  # RabbitMQ
+  RABBITMQ_HOST: "rabbitmq-service"
+  RABBITMQ_PORT: "5672"

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pedidos-service
+  namespace: loja-veloz
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pedidos-service
+  template:
+    metadata:
+      labels:
+        app: pedidos-service
+    spec:
+      containers:
+        - name: pedidos-service
+          image: pedidos-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3001
+          envFrom:
+            - configMapRef:
+                name: loja-veloz-config
+            - secretRef:
+                name: loja-veloz-secrets
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 15
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pedidos-service
+  namespace: loja-veloz
+spec:
+  selector:
+    app: pedidos-service
+  ports:
+    - port: 3001
+      targetPort: 3001

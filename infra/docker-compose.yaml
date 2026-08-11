@@ -1,0 +1,83 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: loja_veloz_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: loja_veloz
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - loja_veloz_net
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: loja_veloz_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - loja_veloz_net
+
+  api-gateway:
+    build: ../api-gateway
+    container_name: loja_veloz_api_gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - pedidos-service
+      - pagamentos-service
+      - estoque-service
+    networks:
+      - loja_veloz_net
+
+  pedidos-service:
+    build: ../pedidos-service
+    container_name: loja_veloz_pedidos
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_NAME: loja_veloz
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+    networks:
+      - loja_veloz_net
+
+  pagamentos-service:
+    build: ../pagamentos-service
+    container_name: loja_veloz_pagamentos
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_NAME: loja_veloz
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+    networks:
+      - loja_veloz_net
+
+  estoque-service:
+    build: ../estoque-service
+    container_name: loja_veloz_estoque
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_NAME: loja_veloz
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+    networks:
+      - loja_veloz_net
+
+networks:
+  loja_veloz_net:
+
+volumes:
+  postgres_data:

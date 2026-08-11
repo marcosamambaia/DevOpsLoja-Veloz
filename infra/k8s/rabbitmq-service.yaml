@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq-service
+  namespace: loja-veloz
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq-service
+  template:
+    metadata:
+      labels:
+        app: rabbitmq-service
+    spec:
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:3-management
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5672
+            - containerPort: 15672
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 15672
+            initialDelaySeconds: 20
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 15672
+            initialDelaySeconds: 30
+            periodSeconds: 20

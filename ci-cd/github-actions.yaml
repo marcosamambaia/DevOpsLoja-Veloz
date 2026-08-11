@@ -1,0 +1,19 @@
+name: CI/CD Loja Veloz
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build Docker
+        run: docker build -t loja-veloz/api-gateway:latest api-gateway/
+
+      - name: Push
+        run: |
+          echo "${{ secrets.REGISTRY_PASS }}" | docker login -u ${{ secrets.REGISTRY_USER }} --password-stdin
+          docker push loja-veloz/api-gateway:latest
