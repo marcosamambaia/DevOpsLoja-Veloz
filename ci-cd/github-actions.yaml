@@ -30,7 +30,7 @@ jobs:
       - name: Scan de vulnerabilidades nas imagens
         run: |
           docker build -t loja-veloz/api-gateway:scan api-gateway/
-          docker scan loja-veloz/api-gateway:scan --accept-license --severity high
+          docker scan loja-veloz/api-gateway:scan --severity high
 
   build-and-push:
     runs-on: ubuntu-latest
