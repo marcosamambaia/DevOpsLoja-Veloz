@@ -42,20 +42,20 @@ jobs:
           echo "${{ secrets.REGISTRY_PASS }}" | docker login -u ${{ secrets.REGISTRY_USER }} --password-stdin
       - name: Build & Push API Gateway
         run: |
-          docker build -t loja-veloz/api-gateway:${{ github.sha }} api-gateway/
-          docker push loja-veloz/api-gateway:${{ github.sha }}
+          docker build -t marcosamambaia/loja-veloz-api-gateway:${{ github.sha }} api-gateway/
+          docker push marcosamambaia/loja-veloz-api-gateway:${{ github.sha }}
       - name: Build & Push Pedidos Service
         run: |
-          docker build -t loja-veloz/pedidos-service:${{ github.sha }} pedidos-service/
-          docker push loja-veloz/pedidos-service:${{ github.sha }}
+          docker build -t marcosamambaia/loja-veloz-pedidos-service:${{ github.sha }} pedidos-service/
+          docker push marcosamambaia/loja-veloz-pedidos-service:${{ github.sha }}
       - name: Build & Push Pagamentos Service
         run: |
-          docker build -t loja-veloz/pagamentos-service:${{ github.sha }} pagamentos-service/
-          docker push loja-veloz/pagamentos-service:${{ github.sha }}
+          docker build -t marcosamambaia/loja-veloz-pagamentos-service:${{ github.sha }} pagamentos-service/
+          docker push marcosamambaia/loja-veloz-pagamentos-service:${{ github.sha }}
       - name: Build & Push Estoque Service
         run: |
-          docker build -t loja-veloz/estoque-service:${{ github.sha }} estoque-service/
-          docker push loja-veloz/estoque-service:${{ github.sha }}
+          docker build -t marcosamambaia/loja-veloz-estoque-service:${{ github.sha }} estoque-service/
+          docker push marcosamambaia/loja-veloz-estoque-service:${{ github.sha }}
 
   validate-kubeconfig:
     runs-on: ubuntu-latest
